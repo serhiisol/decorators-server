@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  decorators-server:
+    # image: decorators-server
+    # container_name: decorators-server
+    # build:
+    #   context: .
+    command: yarn docker-start
+    depends_on:
+      - decorators-server-mongo
+    ports:
+      - 8080:8080
+      - 5858:5858
+    volumes:
+      - ./:/usr/src/service
+      - /usr/src/service/node_modules
+    environment:
+      NODE_ENV: docker
+      PORT: 8080
+      MONGO_URI: mongo:27017/decorators
+      FACEBOOK_APP_ID: 736429119864737
+      FACEBOOK_APP_SECRET: 0756e36a685831939f0b179b391afba1
+      FACEBOOK_APP_CALLBACK: http://localhost:8080/auth/facebook
+      JWT_ISSUER: decorators
+      JWT_ACCESS_EXPIRATION: 1h
+      JWT_REFRESH_EXPIRATION: 30d
+
+  decorators-server-mongo:
+    image: mongo
+    container_name: decorators-server-mongo
+    ports:
+      - 27017

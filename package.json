@@ -1,0 +1,44 @@
+{
+  "name": "decorators-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node server based on Decorators project",
+  "scripts": {
+    "build": "tsc",
+    "build-watch": "tsc --watch",
+    "lint": "tslint --project tsconfig.json",
+    "watch": "set -a && . environment && set +a && nodemon --inspect=0.0.0.0:5858 --watch ./out out/index.js",
+    "start": "npm run build && concurrently 'npm run build-watch' 'npm run watch'",
+    "docker-watch": "nodemon --inspect=0.0.0.0:5858 --watch ./bin bin/index.js",
+    "docker-start": "npm run build && concurrently 'npm run build-watch' 'npm run docker-watch'",
+    "up": "docker-compose up -d --build decorators-server",
+    "down": "docker-compose down"
+  },
+  "dependencies": {
+    "@decorators/di": "1.0.2",
+    "@decorators/express": "2.2.2",
+    "@decorators/mongoose": "3.0.1",
+    "body-parser": "1.18.3",
+    "cors": "2.8.4",
+    "express": "4.16.3",
+    "mongoose": "5.2.0",
+    "tslib": "1.9.3",
+    "winston": "3.0.0",
+    "passport": "0.4.0",
+    "passport-facebook": "2.1.1",
+    "jsonwebtoken": "8.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "10.5.1",
+    "@types/express": "4.16.0",
+    "@types/body-parser": "1.17.0",
+    "@types/winston": "2.3.9",
+    "@types/passport-facebook": "2.1.8",
+    "@types/jsonwebtoken": "7.2.8",
+    "@types/mongoose": "5.0.18",
+    "concurrently": "3.6.0",
+    "nodemon": "1.17.5",
+    "tslint": "5.10.0",
+    "typescript": "2.9.2"
+  }
+}

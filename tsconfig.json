@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "rootDir": "src",
+    "target": "es6",
+    "inlineSources": true,
+    "inlineSourceMap": true,
+    "importHelpers": true,
+    "pretty": true,
+    "lib": ["es2017", "dom"],
+    "typeRoots": ["node_modules/@types"],
+    "outDir": ".bin"
+  },
+  "exclude": ["node_modules", "*.spec.ts"],
+  "include": ["src/index.ts"]
+}

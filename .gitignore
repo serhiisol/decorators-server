@@ -1,0 +1,13 @@
+# Packages
+node_modules
+
+# Environment
+environment
+
+# Compiled
+**/.bin/*
+!**/.bin/.gitkeep
+
+# Misc
+npm-error.log
+yarn-error.log
