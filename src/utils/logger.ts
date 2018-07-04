@@ -1,11 +1,4 @@
 import { createLogger as winston, Logger, transports, addColors, format } from 'winston';
-const { combine, label, timestamp, printf } = format;
-
-const myFormat = printf(info => {
-  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
-});
-
-console.log(myFormat);
 
 addColors({
   info: 'blue',
@@ -20,11 +13,13 @@ export function createLogger(loggerLabel: string): Logger {
     transports: [
       new transports.Console()
     ],
-    format: combine(
-      label({ label: loggerLabel }),
-      timestamp(),
-      // myFormat,
-      format.colorize()
+    format: format.combine(
+      format.colorize(),
+      format.timestamp(),
+      format.label({ label: loggerLabel }),
+      format.printf(info => {
+        return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`;
+      })
     )
   });
 }

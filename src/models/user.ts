@@ -20,8 +20,8 @@ export class User {
    * @returns
    */
   @Static()
-  static create(profile: FacebookProfile, token: string) {
-    let user: User = new User();
+  static create(profile: FacebookProfile, token: string): User {
+    let user: User = new UserModel();
     user.fullName = profile.displayName;
     user.email = profile.emails[0].value;
     user.profilePicture = profile.photos[0].value;

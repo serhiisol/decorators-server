@@ -1,5 +1,6 @@
-import { use, serializeUser, deserializeUser } from 'passport';
+import { use, serializeUser, deserializeUser, authenticate as _authenticate, AuthenticateOptions } from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
+import { Middleware } from '@decorators/express';
 
 import { FacebookProfile } from '../types';
 import { config } from '../config';
@@ -16,7 +17,7 @@ export function configurePassport() {
 
   deserializeUser((id, done) => UserModel.findById(id, done));
 
-  async function processUser(accessToken: string, _refreshToken: string, profile: FacebookProfile): Promise<User> {
+  async function processUser(accessToken: string, profile: FacebookProfile): Promise<User> {
     let user: User = await UserModel.findOne({ 'facebook.id': profile.id });
 
     if (!user) {
@@ -34,13 +35,24 @@ export function configurePassport() {
       clientSecret: config.facebookAppSecret,
       callbackURL: config.facebookAppCallback,
       profileFields: ['id', 'displayName', 'picture.type(large)', 'email']
-    }, (accessToken: string, refreshToken: string, profile: any, done) => {
+    }, (accessToken: string, _, profile: any, done) => {
 
-      processUser(accessToken, refreshToken, profile)
+      processUser(accessToken, profile)
         .then(user => done(null, user))
         .catch(done);
 
     })
   );
 
+}
+
+/**
+ * Facebook authenticate middleware
+ *
+ * @param {AuthenticateOptions} [scope]
+ */
+export function authenticate(scope?: AuthenticateOptions) {
+  return class FacebookMiddleware implements Middleware {
+    use = _authenticate('facebook', scope);
+  };
 }

@@ -9,7 +9,7 @@ export class StatusController {
    * @param {Response} res
    */
   @Get('/')
-  public async status(@Res() res: Response) {
+  async status(@Res() res: Response) {
     res.status(200).send({ status: 'OK' });
   }
 

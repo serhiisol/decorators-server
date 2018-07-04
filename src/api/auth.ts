@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
-import { authenticate } from 'passport';
 import { Controller, Get, Post, Body, Request as Req, Response as Res } from '@decorators/express';
+import { Request, Response } from 'express';
 import { Injectable } from '@decorators/di';
 
 import { TokenService } from '../services';
+import { authenticate, TokenMiddleware, UserMiddleware } from '../middleware';
+import { User } from '../models';
 
 @Injectable()
 @Controller('/auth')
@@ -14,7 +15,7 @@ export class AuthController {
   /**
    * Redirects back to facebook to get code
    */
-  @Get('/facebook', authenticate('facebook', { scope : 'email' }))
+  @Get('/facebook', [authenticate({ scope : 'email' })])
   facebook() {}
 
   /**
@@ -23,7 +24,7 @@ export class AuthController {
    * @param {Request} req
    * @param {Response} res
    */
-  @Get('/facebook/authorize', authenticate('facebook'))
+  @Get('/facebook/authorize', [authenticate()])
   async authorize(
     @Req() req: Request,
     @Res() res: Response
@@ -45,6 +46,20 @@ export class AuthController {
   ) {
     const accessData = await this.tokenService.refreshSession(refreshToken);
     res.send(accessData);
+  }
+
+  /**
+   * Refresh internal session using JWT
+   *
+   * @param {Request} req
+   * @param {Response} res
+   */
+  @Get('/profile', [TokenMiddleware, UserMiddleware])
+  async profile(
+    @Req() req: Request,
+    @Res() res: Response
+  ) {
+    res.send((req.user.instance as User).toJSON());
   }
 
 }

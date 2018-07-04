@@ -13,14 +13,21 @@ export class TokenMiddleware implements Middleware {
 
   constructor(private tokenService: TokenService) {}
 
-  public async use(request: Request, _: Response, next: NextFunction) {
-    const authorization = request.headers.authorization || '';
-    const accessToken = authorization.split(' ')[1];
+  async use(request: Request, _: Response, next: NextFunction) {
+    let error;
 
-    const decodedToken: DecodedToken = await this.tokenService.validateAccessToken(accessToken);
-    request.user.decodedToken = decodedToken;
+    try {
+      const authorization = request.headers.authorization || '';
+      const accessToken = authorization.split(' ')[1];
+      const decodedToken: DecodedToken = await this.tokenService.validateAccessToken(accessToken);
 
-    next();
+      request.user = request.user || {};
+      request.user.decodedToken = decodedToken;
+    } catch (e) {
+      error = e;
+    }
+
+    next(error);
   }
 
 }

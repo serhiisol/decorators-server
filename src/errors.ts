@@ -56,7 +56,7 @@ export class ServerError extends Error {
   status: number;
   code: number;
 
-  public constructor(status: number, message: string, code: number) {
+  constructor(status: number, message: string, code: number) {
     super(message);
 
     Object.defineProperty(this, 'status', {
@@ -69,7 +69,7 @@ export class ServerError extends Error {
     (Error as any).captureStackTrace(this, this.constructor);
   }
 
-  public toObject(): { message: string, status: number, code: number, stack: string[] } {
+  toObject(): { message: string, status: number, code: number, stack: string[] } {
     return {
       status: this.status,
       message: this.message,

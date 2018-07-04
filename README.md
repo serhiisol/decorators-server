@@ -1,4 +1,4 @@
-# Decorators Service
+# Decorators Server
 
 Base nodejs server project to show power of [@decorators](https://github.com/serhiisol/node-decorators)
 
