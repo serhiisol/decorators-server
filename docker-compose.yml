@@ -6,7 +6,7 @@ services:
     # container_name: decorators-server
     # build:
     #   context: .
-    command: yarn docker-start
+    command: npm docker-start
     depends_on:
       - decorators-server-mongo
     ports:
