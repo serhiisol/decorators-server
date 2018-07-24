@@ -1,5 +1,7 @@
 import { Injectable } from '@decorators/di';
 import { verify, sign } from 'jsonwebtoken';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 import { config } from '../config';
 import { JWTOptions, DecodedToken } from '../types';
@@ -38,9 +40,7 @@ export class JWT {
    *
    * @type {string}
    */
-  cert = 'temp-key-secret';
-  // TODO: for release update this
-  // public cert = readFileSync(resolve(__dirname, 'key', 'private.key'));
+  cert = config.production ? readFileSync(resolve(__dirname, 'key', 'private.key')) : 'temp-key-secret';
 
   /**
    * Sign data using passed options
@@ -63,9 +63,9 @@ export class JWT {
    * @returns {Promise<DecodedToken>}
    */
   verifyToken(token: string, options: JWTOptions): Promise<DecodedToken> {
-    return new Promise((resolve, reject) => {
+    return new Promise((res, reject) => {
       verify(token, this.cert, options, (err: Error, decoded: any) =>
-        err ? reject(err) : resolve(decoded)
+        err ? reject(err) : res(decoded)
       );
     });
   }

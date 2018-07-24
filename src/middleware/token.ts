@@ -14,20 +14,14 @@ export class TokenMiddleware implements Middleware {
   constructor(private tokenService: TokenService) {}
 
   async use(request: Request, _: Response, next: NextFunction) {
-    let error;
+    const authorization = request.headers.authorization || '';
+    const accessToken = authorization.split(' ')[1];
+    const decodedToken: DecodedToken = await this.tokenService.validateAccessToken(accessToken);
 
-    try {
-      const authorization = request.headers.authorization || '';
-      const accessToken = authorization.split(' ')[1];
-      const decodedToken: DecodedToken = await this.tokenService.validateAccessToken(accessToken);
+    request.user = request.user || {};
+    request.user.decodedToken = decodedToken;
 
-      request.user = request.user || {};
-      request.user.decodedToken = decodedToken;
-    } catch (e) {
-      error = e;
-    }
-
-    next(error);
+    next();
   }
 
 }

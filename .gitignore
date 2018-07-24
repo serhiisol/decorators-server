@@ -5,8 +5,7 @@ node_modules
 environment
 
 # Compiled
-**/.bin/*
-!**/.bin/.gitkeep
+.bin
 
 # Misc
 npm-error.log

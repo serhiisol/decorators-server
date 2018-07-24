@@ -8,8 +8,9 @@ import { init as initApp } from './app';
 export const httpServer: Server = createServer();
 
 function start(): Server {
+  // Some overrides for mongoose, so it won't complain
   (mongoose as any).Promise = Promise;
-  mongoose.connect(config.mongoUri);
+  mongoose.connect(config.mongoUri, { useNewUrlParser: true });
 
   return httpServer.listen(config.port, err => {
     if (err) {
@@ -36,9 +37,12 @@ async function init() {
 
   process
     .on('SIGINT', await stop)
-    .on('SIGTERM', await stop);
+    .on('SIGTERM', await stop)
+    .on('unhandledRejection', logger.error);
 
   start();
 }
+
+logger.info(`Starting server...`);
 
 init();

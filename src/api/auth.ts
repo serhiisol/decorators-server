@@ -29,7 +29,7 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response
   ) {
-    const accessData = await this.tokenService.ensureSession(req.user as any); // TODO: correct type?
+    const accessData = await this.tokenService.ensureSession(req.user as User);
     res.send(accessData);
   }
 
